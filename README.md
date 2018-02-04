@@ -3,11 +3,12 @@
 
 # Question 1 (Naked Twins)
 Q: How do we use constraint propagation to solve the naked twins problem?  
-A: *Student should provide answer here*
+A: Constraint propagation is using local constraints to reduce the possibie solutions. In case of Sudoku, it is constraints for each box of the sudoku. Using them to find out possible solution for a box, which then creates constraints for other boxes. So recursively applying them to work towards a possible solution.
+In case of naked twins, constraint imposed is that peers of the naked twins will not have the 2 digits listed in the naked twins boxes. So removing those digits from all the peers reduces the possible solutions for the peer boxes.
 
 # Question 2 (Diagonal Sudoku)
 Q: How do we use constraint propagation to solve the diagonal sudoku problem?  
-A: *Student should provide answer here*
+A: For a diagonal sudoku, additional constraint imposed is to also consider boxes along the 2 diagonals within the list of peers. The peer set is now expanded for any given box. And is considered while recursively applying the elimination and only choice algorithms.
 
 ### Install
 
