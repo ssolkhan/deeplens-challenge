@@ -1,0 +1,38 @@
+{
+  "Records": [
+    {
+      "eventVersion": "2.0",
+      "eventTime": "1970-01-01T00:00:00.000Z",
+      "requestParameters": {
+        "sourceIPAddress": "104.129.204.151"
+      },
+      "s3": {
+        "configurationId": "7902f566-23c7-4860-81b8-20ce3396cf7e",
+        "object": {
+          "eTag": "e63a7da06ce8c4e532340bc9c8fc85d7",
+          "sequencer": "005A7E06C047C1640A",
+          "key": "capturedFrame.jpg",
+          "size": 5108
+        },
+        "bucket": {
+          "arn": "arn:aws:s3:::rekog-face",
+          "name": "rekog-face",
+          "ownerIdentity": {
+            "principalId": "A2IA102JX7L3ZH"
+          }
+        },
+        "s3SchemaVersion": "1.0"
+      },
+      "responseElements": {
+        "x-amz-id-2": "SQ/YBAXlZDG49shbteEfsUVW8oAM+fEedmKiIkc1q6SsDdcVgPNJdKN9OIbeL6ElUlxiaOopwqA=",
+        "x-amz-request-id": "B7F790371A4E9283"
+      },
+      "awsRegion": "us-east-1",
+      "eventName": "ObjectCreated:Put",
+      "userIdentity": {
+        "principalId": "A2IA102JX7L3ZH"
+      },
+      "eventSource": "aws:s3"
+    }
+  ]
+}
