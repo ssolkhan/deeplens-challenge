@@ -10,7 +10,7 @@ Patients suffering from memory-loss can use our application to help them remembe
 
 The DeepLens camera and application can also be used by patients at home for memory exercises. Studies show that memory exercises can slow the loss of memory. 
 
-Video - https://www.youtube.com/watch?v=BbFAm7lcnUU&list=UUHnDLHWD8SKRY_juJZrYOzQ&index=2
+Video - https://www.youtube.com/watch?v=BbFAm7lcnUU&t
 
 Architecture
 This project uses DeepLens and AWS services to help people with dementia or suffering from memory loss. It uses the DeepLens’s deep learning video camera to make inferences. The inferences are fed to several AWS services like Rekognition, Polly integrated using Lambda and S3 services, as shown in the flow diagram below. 
