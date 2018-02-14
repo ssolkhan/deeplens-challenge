@@ -1,49 +1,48 @@
-<<<<<<< HEAD
-# deeplens-challenge-Feb-2018
-=======
-# Artificial Intelligence Nanodegree
-## Introductory Project: Diagonal Sudoku Solver
+# Deeplens Challenge, Feb 2018
+# Deeplens Family Assistant
+# Team AI Underdogs
 
-# Question 1 (Naked Twins)
-Q: How do we use constraint propagation to solve the naked twins problem?  
-A: Constraint propagation is using local constraints to reduce the possibie solutions. In case of Sudoku, it is constraints for each box of the sudoku. Using them to find out possible solution for a box, which then creates constraints for other boxes. So recursively applying them to work towards a possible solution.
-In case of naked twins, constraint imposed is that peers of the naked twins will not have the 2 digits listed in the naked twins boxes. So removing those digits from all the peers reduces the possible solutions for the peer boxes.
+##Overview
 
-# Question 2 (Diagonal Sudoku)
-Q: How do we use constraint propagation to solve the diagonal sudoku problem?  
-A: For a diagonal sudoku, additional constraint imposed is to also consider boxes along the 2 diagonals within the list of peers. The peer set is now expanded for any given box. And is considered while recursively applying the elimination and only choice algorithms.
+When thinking of ideas for the DeepLens challenge, we quickly decided that we wanted to create something that could help people in need. We wanted to use Technology to bring people together. After considering many applications of the device, we recognized that the ability to recognize faces would be invaluable in helping those who had difficulty recognizing other people. Individuals diagnosed with Dementia (patients) have difficulty recognizing friends and even family, which can cause them to become disoriented and confused when speaking with loved ones. 
 
-### Install
+Patients suffering from memory-loss can use our application to help them remember their loved ones. The DeepLens camera configured with our application can be carried around. It will recognize family members and friends in view of the camera and audio play their name with brief bio. This will aid and help connect the dots for those with memory-loss. Information about family and friends is pre-configured and uploaded in a data store.
 
-This project requires **Python 3**.
+The DeepLens camera and application can also be used by patients at home for memory exercises. Studies show that memory exercises can slow the loss of memory. 
 
-We recommend students install [Anaconda](https://www.continuum.io/downloads), a pre-packaged Python distribution that contains all of the necessary libraries and software for this project. 
-Please try using the environment we provided in the Anaconda lesson of the Nanodegree.
+Video - https://www.youtube.com/watch?v=BbFAm7lcnUU&list=UUHnDLHWD8SKRY_juJZrYOzQ&index=2
 
-##### Optional: Pygame
+Architecture
+This project uses DeepLens and AWS services to help people with dementia or suffering from memory loss. It uses the DeepLens’s deep learning video camera to make inferences. The inferences are fed to several AWS services like Rekognition, Polly integrated using Lambda and S3 services, as shown in the flow diagram below. 
 
-Optionally, you can also install pygame if you want to see your visualization. If you've followed our instructions for setting up our conda environment, you should be all set.
 
-If not, please see how to download pygame [here](http://www.pygame.org/download.shtml).
 
-### Code
 
-* `solution.py` - You'll fill this in as part of your solution.
-* `solution_test.py` - Do not modify this. You can test your solution by running `python solution_test.py`.
-* `PySudoku.py` - Do not modify this. This is code for visualizing your solution.
-* `visualize.py` - Do not modify this. This is code for visualizing your solution.
+##Code
+###Lambdas
+Deeplens-face-detection - is the default face detection provided with DeepLens. greengrassHelloWorld.py is modified to upload captured frames to rekog-face S3 bucket. Another lambda function recogFace is auto triggered on upload of image to this S3 bucket.
+This function also plays the audio that is uploaded from the audio-rekog-face S3 bucket. It deletes the audio file from the bucket once played out.
+recogFace - triggered when an image is uploaded to rekog-face S3 bucket. This connects to AWS Rekognition to recognize the face, retrieve information associated, synthesize to audio using AWS Polly and drop the audio in the audio-rekog-face S3 bucket.
 
-### Visualizing
+###S3 Buckets
+aionedge-master-faces - this is the master S3 bucket that stores the pictures and bio information
+rekog-face - stores the picture frames captured by device, recogFace lambda function is auto triggered when an image is uploaded to this bucket
+audio-rekog-face - stores the audio of the person name and information, is read by the Deeplens-face-detection lambda function to play the audio on the device
 
-To visualize your solution, please only assign values to the values_dict using the `assign_value` function provided in solution.py
 
-### Submission
-Before submitting your solution to a reviewer, you are required to submit your project to Udacity's Project Assistant, which will provide some initial feedback.  
+##Run
+###Setup
+Use UI  to upload photos of family and friends to be recognized
+Add a front shot with a brief description that can help remind and make connection for the patient
 
-The setup is simple.  If you have not installed the client tool already, then you may do so with the command `pip install udacity-pa`.  
+###Use Case 1 - Recognize Family & Friends
+Turn on the DeepLens camera
+Person to be recognized comes in view of the camera
+DeepLens automatically detects using the default face detection ML model. Using various AWS services, the face is matched with photos uploaded. 
+If the face matches then the name of person along with description is converted to audio format. This audio is then accessed and played by the DeepLens device.
 
-To submit your code to the project assistant, run `udacity submit` from within the top-level directory of this project.  You will be prompted for a username and password.  If you login using google or facebook, visit [this link](https://project-assistant.udacity.com/auth_tokens/jwt_login) for alternate login instructions.
-
-This process will create a zipfile in your top-level directory named sudoku-<id>.zip.  This is the file that you should submit to the Udacity reviews system.
-
->>>>>>> c67f2af5ad02fe58049bf602df52cf5363d55fae
+###Use Case 2 - Memory Exercise
+Turn on the DeepLens camera
+Point picture of person stored on the smart phone to the camera
+DeepLens automatically detects using the default face detection ML model. Using various AWS services, the face is matched with photos uploaded. 
+If the face matches then the name of person along with description is converted to audio format. This audio is then accessed and played by the DeepLens device.
