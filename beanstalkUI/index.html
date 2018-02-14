@@ -1,0 +1,459 @@
+<!DOCTYPE html>
+<html>
+  <head>
+	<script src="https://sdk.amazonaws.com/js/aws-sdk-2.189.0.min.js"></script>
+  	<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/css/bootstrap.min.css" integrity="sha384-Gn5384xqQ1aoWXA+058RXPxPg6fy4IWvTNh0E263XmFcJlSAwiGgFAW/dAiS6JXm" crossorigin="anonymous">
+    <title>Elastic Beanstalk</title>
+    <style>
+      body {
+      	margin-top: 100px;
+    	margin-bottom: 100px;
+    	margin-right: 300px;
+    	margin-left: 300px;      }
+
+      .form-style-6{
+        font: 95% Arial, Helvetica, sans-serif;
+        max-width: 700px;
+        margin: 10px auto;
+        padding: 16px;
+        background: #F7F7F7;
+      }
+
+      .form-style-6 h1{
+        background: #43D1AF;
+        padding: 20px 0;
+        font-size: 140%;
+        font-weight: 300;
+        text-align: center;
+        color: #fff;
+        margin: -16px -16px 16px -16px;
+      }
+
+      #photoCollectionDisplay {
+      	margin-top: 40px;
+      }
+
+      .collectionTitleContainer p{
+      	font-size: 140%;
+      	text-align: center;
+      }
+
+      .instructionContainer {
+      	padding-top: 15px;
+      }
+
+      .instructionContainer h2{
+      	font-size: 120%;
+      	color: #389e85;
+      }
+
+      .collectionElement {
+      	background: #43D1AF;
+      	color: #fff;
+      	padding: 10px;
+      	border-bottom: 2px solid #30C29E;
+      	min-height: 100%;
+      }
+
+      .collectionElementName {
+      	text-align: center;
+      	font-size: 105%;
+      	font-weight: bold;
+      }
+
+      .collectionElementBio {
+      	text-align: center;
+      }
+
+      .collectionElementRow {
+      	margin-top: 15px;
+      }
+
+      .collectionElementPicture {
+      	width: 50px;
+      	height: 50px;
+      }
+
+        .form-style-6 input[type="text"],
+.form-style-6 input[type="date"],
+.form-style-6 input[type="datetime"],
+.form-style-6 input[type="email"],
+.form-style-6 input[type="number"],
+.form-style-6 input[type="search"],
+.form-style-6 input[type="time"],
+.form-style-6 input[type="url"],
+.form-style-6 textarea,
+.form-style-6 select 
+{
+    -webkit-transition: all 0.30s ease-in-out;
+    -moz-transition: all 0.30s ease-in-out;
+    -ms-transition: all 0.30s ease-in-out;
+    -o-transition: all 0.30s ease-in-out;
+    outline: none;
+    box-sizing: border-box;
+    -webkit-box-sizing: border-box;
+    -moz-box-sizing: border-box;
+    width: 100%;
+    background: #fff;
+    margin-bottom: 4%;
+    border: 1px solid #ccc;
+    padding: 3%;
+    color: #555;
+    font: 95% Arial, Helvetica, sans-serif;
+}
+.form-style-6 input[type="text"]:focus,
+.form-style-6 input[type="date"]:focus,
+.form-style-6 input[type="datetime"]:focus,
+.form-style-6 input[type="email"]:focus,
+.form-style-6 input[type="number"]:focus,
+.form-style-6 input[type="search"]:focus,
+.form-style-6 input[type="time"]:focus,
+.form-style-6 input[type="url"]:focus,
+.form-style-6 textarea:focus,
+.form-style-6 select:focus
+{
+    box-shadow: 0 0 5px #43D1AF;
+    padding: 3%;
+    border: 1px solid #43D1AF;
+}
+
+.form-style-6 input[type="submit"],
+.form-style-6 input[type="button"],
+.custom-file-upload{
+    box-sizing: border-box;
+    -webkit-box-sizing: border-box;
+    -moz-box-sizing: border-box;
+    width: 100%;
+    padding: 3%;
+    background: #43D1AF;
+    border-bottom: 2px solid #30C29E;
+    border-top-style: none;
+    border-right-style: none;
+    border-left-style: none;    
+    color: #fff;
+}
+.form-style-6 input[type="submit"]:hover,
+.form-style-6 input[type="button"]:hover,
+.custom-file-upload:hover{
+    background: #2EBC99;
+}
+
+input[type="file"] {
+    display: none;
+}
+
+.custom-file-upload {
+    display: inline-block;
+    padding: 6px 12px;
+    cursor: pointer;
+    width: initial;
+    margin-bottom: 15px;
+}
+
+.file_preview {
+  display: inline-block;
+  margin-left: 15px;
+}
+      
+    </style>
+  </head>
+  <body>
+    <div class="form-style-6 container">
+      <h1>Welcome to the DeepLens Family Assistant</h1>
+
+      <div class ="row">
+      	<div class="col-md-12 instructionContainer">
+      		<h2>1. Choose a picture of yourself</h2>
+      	</div>
+      </div>
+
+      <div class="row">
+          <div class="col-md-12">
+            <div>
+              <label class="custom-file-upload">
+                Select Photo
+                <input id="photoupload" type="file" accept=".jpg, .jpeg, .png">
+              </label>
+              <div class="file_preview">
+                <span id='file_preview_text'>No picture selected.</span>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <div class="row">
+        	<div class="col-md-12 instructionContainer">
+        		<h2>2. Enter your name</h2>
+        	</div>
+        </div>
+
+        <div class="row">
+          <div class="col-md-6">
+          	<div class="form-group">
+           		<input type="text" class="form-control field-style field-split align-left" id="first_name" placeholder="First Name">
+            </div>
+          </div>
+
+          <div class="col-md-6">
+           <div class="form-group">
+              <input type="text" class="form-control field-style field-split align-left" id="last_name" placeholder="Last Name">
+            </div>
+          </div>
+        </div>
+
+        <div class="row">
+        	<div class="col-md-12 instructionContainer">
+        		<h2>2. Tell us about you!</h2>
+        	</div>
+        </div>
+
+        <div class="row">
+          <div class="col-md-12">
+            <div class="form-group">
+              <textarea class="form-control" rows="5" id="biography"></textarea>
+            </div>
+          </div>
+        </div>
+
+        </form>
+
+        <div class="row">
+            <div class="col-md-12">
+              <input type="submit" onclick="addPhoto();"/>
+            </div>
+        </div>
+
+        <div id="photoCollectionDisplay">
+        	<div class="col-md-12 collectionTitleContainer">
+        		<p>Collection</p>
+        	</div>
+        	<div id="photoCollectionElementContainer">
+        		<div class="row" id='lastCollectionRow'>
+        		</div>
+        	</div>
+        </div>
+
+     </div>
+  </body>
+
+  <script>
+    //Set up file inputs, other globals
+    var pictureInput = document.getElementById('photoupload');
+    var filePreviewSpan = document.getElementById('file_preview_text');
+    var photoCollectionRow = document.getElementById('lastCollectionRow');
+    var elementCounter = 0;
+    var amazonUrl = 'https://s3.amazonaws.com/';
+
+    //Attach event listener for when 
+    pictureInput.addEventListener('change', updateImageDisplay);
+
+    //Show collection at bottom of page
+    showCollection();
+
+    //Updates image preview text when image is selected
+  function updateImageDisplay() {
+    var curFiles = pictureInput.files;
+    if(curFiles.length === 0) {
+      filePreviewSpan.textContent = 'No picture selected.';
+    } else {
+      filePreviewSpan.textContent = curFiles[0].name;
+    }
+  }
+
+  //Resets all inputs
+  function resetInputs() {
+  	var pictureInput = document.getElementById('photoupload');
+    var filePreviewSpan = document.getElementById('file_preview_text');
+    var firstNameInput = document.getElementById('first_name');
+    var lastNameInput = document.getElementById('last_name');
+    var biography = document.getElementById('biography');
+
+    pictureInput.files = null;
+    filePreviewSpan.textContent = 'No picture selected.';
+    firstNameInput.value = '';
+    lastNameInput.value = '';
+    biography.value = '';
+
+  }
+
+  //Shows collection of photos already in bucket
+  function showCollection() {
+
+  		//Configure and get objects from S3
+  		var s3 = configureS3();
+		s3.listObjects({}, function(err, data) {
+			if(err) console.log(err, err.stack);
+			else {
+				//Get user information file names
+				function isInformation(file) {
+					fileName = file.Key;
+					var regex = RegExp('Information.txt$');
+					return regex.test(fileName);
+				}
+				var userInfoArray = data.Contents.filter(isInformation);
+
+				//Get ahold of collection display for placing elements, create initial row
+					var photoCollectionContainer = document.getElementById('photoCollectionElementContainer');
+
+  				userInfoArray.forEach(function(element) { 
+  					addElementToCollection(element.Key, s3, photoCollectionRow);
+  				});
+			}
+		})
+  }
+
+  function addElementToCollection(key, s3) {
+
+  					//Get ahold of collection display for placing elements
+					var photoCollectionContainer = document.getElementById('photoCollectionElementContainer');
+					var bucket = 'aionedge-master-faces';
+				
+					//Get each file out of bucket
+					s3.getObject({
+  						Bucket: bucket,
+  						Key: key
+  					}, function (err, data) {
+  						if(err) {
+  							console.log(err, err.stack);
+  						} else {
+  							if(elementCounter % 3 == 0 && elementCounter != 0) {
+		  						photoCollectionRow.id = '';
+		  						photoCollectionRow = document.createElement('div');
+		  						photoCollectionRow.className = 'row collectionElementRow';
+		  						photoCollectionRow.id = 'lastCollectionRow';
+		  						photoCollectionContainer.appendChild(photoCollectionRow);
+  							}
+
+  							//Get file contents, split contents into array
+							var fileContents = data.Body.toString('ascii');
+							var splitContentsArray = fileContents.split('\n');
+
+							//create new column for element
+							var photoCollectionColumn = document.createElement('div');
+  							photoCollectionColumn.className = 'col-md-4';
+  							photoCollectionRow.appendChild(photoCollectionColumn);
+
+  							//Attach file contents to HTLM elements
+  							var name = splitContentsArray[0] + ' ' + splitContentsArray[1];
+  							var bio = splitContentsArray[2];
+  							var picturePath = amazonUrl + bucket + '/' + splitContentsArray[1] + '/' + splitContentsArray[0] + splitContentsArray[1] + '.jpeg';
+  							var element = buildCollectionElement(picturePath, name, bio);
+
+  							//Add element to page, increment counter
+  							photoCollectionColumn.appendChild(element);
+  							elementCounter++;
+  						}
+  					})
+  }
+
+  //Builds and returns a new collectionElement
+  function buildCollectionElement(pictureSrc, name, bio) {
+  	//Creates wrapper
+  	var elementWrapper = document.createElement('div');
+  	elementWrapper.className = 'collectionElement';
+
+  	//Set up picture
+  	var elementPicture = document.createElement('picture');
+  	elementPicture.src = pictureSrc;
+  	elementPicture.className = 'collectionElementPicture';
+
+  	//Sets up name box, bio box
+  	var elementName = document.createElement('p');
+  	elementName.className = 'collectionElementName';
+  	elementName.textContent = name;
+  	var elementBio = document.createElement('p');
+  	elementBio.className = 'collectionElementBio';
+  	elementBio.textContent = bio;
+
+  	//Attach element pieces to main element wrapper
+  	elementWrapper.appendChild(elementPicture);
+  	elementWrapper.appendChild(elementName);
+  	elementWrapper.appendChild(elementBio);
+
+  	return elementWrapper;
+  }
+
+  function configureS3() {
+		var albumBucketName = 'aionedge-master-faces';
+		var bucketRegion = 'us-east-1';
+		var IdentityPoolId = 'us-east-1:79768b68-43d0-4acc-8954-e89984a0f520';
+		
+		AWS.config.update({
+		region: bucketRegion,
+		credentials: new AWS.CognitoIdentityCredentials({
+			IdentityPoolId: IdentityPoolId
+		})
+		});
+		
+		var s3 = new AWS.S3({
+		apiVersion: '2006-03-01',
+		params: {Bucket: albumBucketName}
+		});
+		
+		return s3;
+	}
+	
+	// could pass name of album to this function for specifying diff families
+	function addPhoto() {
+	
+	var s3 = configureS3();
+	
+	var firstName = document.getElementById('first_name').value;
+	var lastName = document.getElementById('last_name').value;
+	var biography = document.getElementById('biography').value;
+	
+	var albumName = lastName;
+	
+	var files = document.getElementById('photoupload').files;
+	if (!files.length) {
+		return alert('Please choose a file to upload first.');
+	}
+	var file = files[0];
+	var fileName = firstName+lastName+".jpeg";
+	var albumPhotosKey = encodeURIComponent(albumName) + '/';
+	
+	var photoKey = albumPhotosKey + fileName;
+	s3.upload({
+		Key: photoKey,
+		Body: file,
+		ACL: 'public-read'
+	}, function(err, data) {
+		if (err) {
+		  alert('There was an error uploading your photo: ', err.message);
+		}
+		alert('Successfully uploaded photo.');
+	});
+	
+	var textFileName = firstName + lastName + 'Information.txt';
+	var textKey = albumPhotosKey + textFileName;
+	
+	lastName = lastName + "\n";
+	firstName = firstName + "\n";
+	biography = biography + "\n";
+	
+	console.log(firstName);
+	console.log(lastName);
+	console.log(biography);
+	
+	var fileType = "text/plain";
+	
+	const newTextFile = new File([firstName,lastName,biography], textFileName, {type:fileType});
+	
+	s3.upload({
+		Key: textKey,
+		Body: newTextFile,
+		ACL: 'public-read'
+	}, function(err, data) {
+		if (err) {
+		  alert('There was an error uploading your text file: ', err.message);
+		}
+		alert('Successfully uploaded text file.');
+	});
+
+	//reset all inputs
+	resetInputs();
+	addElementToCollection(textKey, s3);
+	}
+  </script>
+</html>
+
